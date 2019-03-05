@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.project.exodia.entity.Document;
-import com.spring.project.exodia.entity.User;
 import com.spring.project.exodia.service.DocumentService;
 
 @Controller
@@ -74,8 +73,8 @@ public class SecuredController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(method = RequestMethod.DELETE, path = "/print")
-	public ModelAndView printDocument(ModelAndView modelAndView,Document document) {
+	@RequestMapping(method = RequestMethod.POST, path = "/print")
+	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute Document document) {
 		documentService.printDocument(document);
 		modelAndView.setViewName("redirect:/home");
 		return modelAndView;

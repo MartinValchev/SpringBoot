@@ -1,5 +1,6 @@
 package com.spring.project.exodia.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +22,7 @@ public class Document {
 	parameters= {@Parameter(name=UuIdUserGenerator.INCREMENT_PARAM, value="10"),
 			@Parameter(name=UuIdDocumentGenerator.DOCUMENT_VALUE_PREFIX_PARAMETER, value="DOC_"),
 			@Parameter(name=UuIdDocumentGenerator.DOCUMENT_NUMBER_FORMAT_PARAMETER, value="%05d")})
+	@Column(name="uuid", updatable=false, nullable=false)
 	private String uuid;
 	
 	private String title;

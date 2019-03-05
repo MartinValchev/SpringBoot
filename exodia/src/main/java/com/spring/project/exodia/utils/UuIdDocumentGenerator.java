@@ -27,7 +27,7 @@ public class UuIdDocumentGenerator extends SequenceStyleGenerator{
 
 		@Override
 		public Serializable generate(SharedSessionContractImplementor session, Object object) {
-			return DOCUMENT_VALUE_PREFIX_DEFAULT + String.format(numberFormat, super.generate(session, object));
+			return DOCUMENT_VALUE_PREFIX_PARAMETER + String.format(numberFormat, super.generate(session, object));
 			
 		}
 	}
