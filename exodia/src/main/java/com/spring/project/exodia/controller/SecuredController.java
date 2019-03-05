@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.project.exodia.entity.Document;
@@ -73,18 +74,18 @@ public class SecuredController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/print")
-	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute Document document) {
+/*	@RequestMapping(method = RequestMethod.POST, path = "/printDocument")
+	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute(name="uuid") String uuid) {
 		documentService.printDocument(document);
 		modelAndView.setViewName("redirect:/home");
 		return modelAndView;
-	}
+	}*/
 	
-	@RequestMapping(method = RequestMethod.GET, path = "/print")
-	public ModelAndView getPrintPage(ModelAndView modelAndView) {
-
+	@RequestMapping(method = RequestMethod.POST, path = "/print")
+	public ModelAndView getPrintPage(ModelAndView modelAndView,@ModelAttribute(name="document") Document document) {
 		if (isUserLogged()) {
-			modelAndView.setViewName("redirect:/print");
+			modelAndView.addObject("document", document);
+			modelAndView.setViewName("print");
 		} else {
 			modelAndView.setViewName("redirect:/login");
 		}
