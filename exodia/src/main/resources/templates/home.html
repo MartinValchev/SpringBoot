@@ -19,13 +19,13 @@
         <div class="print-container container-fluid" th:each="doc: ${documents}">
         	<div class="print-scheduled col-md-2 bg-exodia rounded">
         		<div class="buttons-holder w-75 mx-auto d-flex justify-content-between">        			  
-	                 <h5 class="text-center text-white font-weight-bold py-3 mt-3" id="title" name="title" th:text="${doc.title!=null and #strings.length(doc.title)>12} ? |${#strings.substring(doc.title,0,11)}...| : ${doc.title}"></h5>
+	                 <h5 class="text-center text-white font-weight-bold py-3 mt-3" id="titleDoc" name="titleDoc" th:text="${doc.title!=null and #strings.length(doc.title)>12} ? |${#strings.substring(doc.title,0,11)}...| : ${doc.title}"></h5>
 	                 <hr class="bg-white"/>	 
 	                <form th:action="@{/print}"  method="post">
 						<input type="text" hidden id="uuid" name="uuid" th:value="${doc.uuid}"></p>
-		                 <h5 class="text-center text-white  font-weight-bold py-3 mt-3" th:value="${doc.title}" id="title" name="title" th:text="${doc.title!=null and #strings.length(doc.title)>12} ? |${#strings.substring(doc.title,0,11)}...| : ${doc.title}"></h5>
+		                <input type="text" hidden  name="title" id="title" th:value="${doc.title}">
 		                 <hr class="bg-white"/>	  
-		                 <input type="text" hidden id="content" name="content" th:value="${doc.content}"></p>                                             
+		                 <input type="text" hidden id="content" name="content" th:value="${doc.content}">                                            
 		    			 <input type="submit" value="Print" class="btn bg-exodia text-white font-weight-bold mb-3" />	    			 
 					</form>                                              
 	    			
