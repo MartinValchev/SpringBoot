@@ -71,10 +71,5 @@ public class BasicController {
 		modelAndView.setViewName("redirect:/login");
 		return modelAndView;
 	}
-	
-	@GetMapping("/logout")
-	public ModelAndView logout(ModelAndView modelAndView) {
-		modelAndView.setViewName("redirect:/index");
-		return modelAndView;
-	}
+
 }

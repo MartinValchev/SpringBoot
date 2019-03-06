@@ -21,7 +21,8 @@ public class DocumentRepositoryImpl implements DocumentRepository {
 
 	@Override
 	public Document getDocumentById(String id) {
-		TypedQuery<Document> documentQuery = entityManager.createQuery(ProjectUtils.GET_DOCUMENTS_BY_ID_QUERY, Document.class);
+		TypedQuery<Document> documentQuery = entityManager.createQuery(ProjectUtils.GET_DOCUMENTS_BY_ID_QUERY,
+				Document.class);
 		documentQuery.setParameter("documentId", id);
 		return documentQuery.getSingleResult();
 	}
@@ -35,14 +36,19 @@ public class DocumentRepositoryImpl implements DocumentRepository {
 
 	@Override
 	public Document storeDocument(Document document) {
-		
+
 		return entityManager.merge(document);
 	}
 
 	@Override
 	public void deleteDocument(Document document) {
-		entityManager.remove(document);
-		
-	}
+		if (!entityManager.contains(document)) {
+			Document docNew = entityManager.merge(document);
+			entityManager.remove(docNew);
+		} else {
+			entityManager.remove(document);
+		}
+
+	};
 
 }

@@ -51,11 +51,11 @@ public class SecuredController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/details/{id}")
-	public ModelAndView getDetailsPage(ModelAndView modelAndView, @PathVariable("id") String id) {
+	@RequestMapping("/details/{uuid}")
+	public ModelAndView getDetailsPage(ModelAndView modelAndView, @PathVariable("uuid") String uuid) {
 
 		if (isUserLogged()) {
-			Document document = documentService.getDocumentById(id);
+			Document document = documentService.getDocumentById(uuid);
 			modelAndView.addObject("document", document);
 			modelAndView.setViewName("details");
 		} else {
@@ -74,12 +74,7 @@ public class SecuredController {
 		return modelAndView;
 	}
 	
-/*	@RequestMapping(method = RequestMethod.POST, path = "/printDocument")
-	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute(name="uuid") String uuid) {
-		documentService.printDocument(document);
-		modelAndView.setViewName("redirect:/home");
-		return modelAndView;
-	}*/
+
 	
 	@RequestMapping(method = RequestMethod.POST, path = "/print")
 	public ModelAndView getPrintPage(ModelAndView modelAndView,@ModelAttribute(name="document") Document document) {
@@ -92,9 +87,27 @@ public class SecuredController {
 
 		return modelAndView;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/printDocument")
+	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute(name="document") Document document) {
+		documentService.printDocument(document);
+		modelAndView.setViewName("redirect:/home");
+		return modelAndView;
+	}
 	private boolean isUserLogged() {
 		return httpSessionFactory.getObject().getAttribute("username") != null;
 
+	}
+	@RequestMapping("/logout")
+	public ModelAndView logout(ModelAndView modelAndView) {
+		 HttpSession session =httpSessionFactory.getObject();
+		 if(session!=null){
+			 httpSessionFactory.getObject().removeAttribute("username");
+	            session.invalidate();
+	            session=null;
+	        }
+		 modelAndView.setViewName("redirect:/index"); 
+		return modelAndView;
 	}
 
 }

@@ -17,7 +17,8 @@
         <hr class="bg-exodia hr-2"/>
         <h1 class="text-center text-exodia" th:text="|Document - ${document.uuid}|"></h1>
         <hr class="bg-exodia hr-2 w-75"/>
-        <form class="mx-auto w-75" method="post" action="/printDocument">
+        <form class="mx-auto w-75" method="post" th:action="@{/printDocument}">
+           <input type="text" hidden id="uuid" name="uuid" th:value="${document.uuid}"></p>
             <div class="form-group">
                 <div class="label-center d-flex justify-content-center">
                     <label for="title" class="text-exodia h3">Title</label>
