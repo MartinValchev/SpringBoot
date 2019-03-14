@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:dt="http://www.thymeleaf.org/dandelion/datatables">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form th:object="${virusBindingModel}" th:fragment="addVirusForm" method="post" th:action="@{/virus/add}">
+        <div class="form-group row" th:classappend="${#fields.hasErrors('name')} ? 'has-danger'">
+            <label for="virusName" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-danger" id="virusName"
+                       placeholder="virus name" th:field="*{name}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('name')}" th:text="${error}">Sorry, that name is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('description')} ? 'has-danger'">
+            <label for="inputDescription" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <input type="text" step="0.01" min="0" class="form-control form-control-danger" id="inputDescription"
+                       placeholder="some virus description" th:field="*{description}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('description')}" th:text=" ${error}">Sorry, that description is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('sideEffects')} ? 'has-danger'">
+            <label for="sideEffectsInput" class="col-sm-2 col-form-label">Side Effects</label>
+            <div class="col-sm-10">
+                <input type="text" min="0" class="form-control form-control-danger" id="sideEffectsInput"
+                       placeholder="some side effect" th:field="*{sideEffects}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('sideEffects')}" th:text=" ${error}">Sorry, that sideEffects is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('creator')} ? 'has-danger'">
+            <label for="creatorInput" class="col-sm-2 col-form-label">Creator</label>
+            <div class="col-sm-10">
+                <input type="text" min="0" class="form-control form-control-danger" id="creatorInput"
+                       placeholder="eg pesho" th:field="*{creator}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('creator')}" th:text=" ${error}">Sorry, that creator is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="isDeadlyInput" class="col-sm-2 col-form-label">Is Deadly </label>
+            <input id="isDeadlyInput" type="checkbox" th:field="*{isDeadly}" />
+        </div>
+        <div class="form-group row">
+            <label for="isCurableInput" class="col-sm-2 col-form-label">Is Curable </label>
+            <input id="isCurableInput" type="checkbox" th:field="*{isCurable}" />
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('mutation')} ? 'has-danger'">
+            <div class="col-sm-10">
+                <ul class="list-group-flush">
+                    <li th:each="mut : ${allMutations}" class="list-group-item">
+                        <input type="radio" th:field="*{mutation}" th:value="${mut}" />
+                        <label th:for="${#ids.prev('mutation')}" th:text="|   ${mut}|">Mutation</label>
+                    </li>
+                </ul>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('mutation')}" th:text="${error}">Error in mutation</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('turnoverRate')} ? 'has-danger'">
+            <label for="turnoverRateInput" class="col-sm-2 col-form-label">Turnover Rate</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control form-control-danger" id="turnoverRateInput"
+                       placeholder="1-100" th:field="*{turnoverRate}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('turnoverRate')}" th:text="${error}">Sorry, that turnoverRate is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('hoursUntilTurn')} ? 'has-danger'">
+            <label for="hoursUntilTurnInput" class="col-sm-2 col-form-label">Hours Until Turn</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control form-control-danger" id="hoursUntilTurnInput"
+                       placeholder="3" th:field="*{hoursUntilTurn}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('hoursUntilTurn')}" th:text="${error}">Sorry, that hoursUntilTurn is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label th:for="magnitude"> Magnitude:</label>
+            <select class="form-control" th:field="*{magnitude}">
+                <option th:each="magnitude:${magnitudeList}" th:value="${magnitude}" th:text="${#strings.capitalize(#strings.toLowerCase(magnitude))}"></option>
+            </select>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('releasedOn')} ? 'has-danger'">
+            <label for="releasedOnInput" class="col-sm-2 col-form-label"> Released Date:</label>
+            <input id ="releasedOnInput" type="date" class="form-control form-control-danger" th:field=="*{releasedOn}">
+            <div class="form-control-feedback" th:each="error : ${#fields.errors('releasedOn')}" th:text="${error}">Error in birth date</div>
+        </div>
+        <div class="form-group row " th:classappend="${#fields.hasErrors('capitals')} ? 'has-danger'">
+            <label th:for="capitals"> Affected Capitals:</label>
+            <select class="form-control"  th:field="*{capitals}" multiple="true">
+                <option th:each="capital:${capitalsList}" th:value="${capital.id}" th:text="${capital.name}"></option>
+            </select>
+            <div class="form-control-feedback small" th:each="error : ${#fields.errors('capitals')}" th:text="${error}">Error in capitals</div>
+         <!--   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"></input>-->
+          
+        </div>
+        <br/>
+        <input type="submit" class="btn btn-default" value="Attack"></input>
+        
+    </form>
+<!-- Edit Virus form--->
+    <form th:object="${virusBindingModel}" th:fragment="editVirusForm" th:method="put" th:action="@{/editVirus}">
+        <input class="form-control form-control-danger" type="hidden" th:field="*{id}" readonly>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('name')} ? 'has-danger'">
+            <label for="virusName1" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control form-control-danger" id="virusName1"
+                       placeholder="virus name" th:field="*{name}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('name')}" th:text="${error}">Sorry, that name is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('description')} ? 'has-danger'">
+            <label for="inputDescription1" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <input type="text" step="0.01" min="0" class="form-control form-control-danger" id="inputDescription1"
+                       placeholder="some virus description" th:field="*{description}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('description')}" th:text=" ${error}">Sorry, that description is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('sideEffects')} ? 'has-danger'">
+            <label for="sideEffectsInput1" class="col-sm-2 col-form-label">Side Effects</label>
+            <div class="col-sm-10">
+                <input type="text" min="0" class="form-control form-control-danger" id="sideEffectsInput1"
+                       placeholder="some side effect" th:field="*{sideEffects}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('sideEffects')}" th:text=" ${error}">Sorry, that sideEffects is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('creator')} ? 'has-danger'">
+            <label for="creatorInput1" class="col-sm-2 col-form-label">Creator</label>
+            <div class="col-sm-10">
+                <input type="text" min="0" class="form-control form-control-danger" id="creatorInput1"
+                       placeholder="eg pesho" th:field="*{creator}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('creator')}" th:text=" ${error}">Sorry, that creator is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="isDeadlyInput1" class="col-sm-2 col-form-label">Is Deadly </label>
+            <input id="isDeadlyInput1" type="checkbox" th:field="*{isDeadly}" />
+        </div>
+        <div class="form-group row">
+            <label for="isCurableInput1" class="col-sm-2 col-form-label">Is Curable </label>
+            <input id="isCurableInput1" type="checkbox" th:field="*{isCurable}" />
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('mutation')} ? 'has-danger'">
+            <div class="col-sm-10">
+                <ul class="list-group-flush">
+                    <li th:each="mut : ${allMutations}" class="list-group-item">
+                        <input type="radio" th:field="*{mutation}" th:value="${mut}" />
+                        <label th:for="${#ids.prev('mutation')}" th:text="${mut}">Mutation</label>
+                    </li>
+                </ul>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('mutation')}" th:text="${error}">Error in mutation</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('turnoverRate')} ? 'has-danger'">
+            <label for="turnoverRateInput1" class="col-sm-2 col-form-label">Turnover Rate</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control form-control-danger" id="turnoverRateInput1"
+                       placeholder="1-100" th:field="*{turnoverRate}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('turnoverRate')}" th:text="${error}">Sorry, that turnoverRate is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row" th:classappend="${#fields.hasErrors('hoursUntilTurn')} ? 'has-danger'">
+            <label for="hoursUntilTurnInput1" class="col-sm-2 col-form-label">Hours Until Turn</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control form-control-danger" id="hoursUntilTurnInput1"
+                       placeholder="3" th:field="*{hoursUntilTurn}"/>
+                <div class="form-control-feedback small" th:each="error : ${#fields.errors('hoursUntilTurn')}" th:text="${error}">Sorry, that hoursUntilTurn is invalid</div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label th:for="magnitude"> Magnitude:</label>
+            <select class="form-control" th:field="*{magnitude}">
+                <option th:each="magnitude:${magnitudeList}" th:value="${magnitude}" th:text="${magnitude}"></option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <label for="releasedOnInput1" class="col-sm-2 col-form-label"> Released Date:</label>
+            <input id ="releasedOnInput1" type="date" class="form-control form-control-danger" th:text="${#dates.format(virusBindingModel.releasedOn,'dd-MMM-yyyy')}" th:field="*{releasedOn}" readonly>
+        </div>
+        <div class="form-group row " th:classappend="${#fields.hasErrors('capitals')} ? 'has-danger'">
+            <label th:for="capitals"> Affected Capitals:</label>
+            <select class="form-control" th:field="*{capitals}" multiple>
+                <option th:each="capital:${capitalsList}" th:value="${capital.id}" th:text="${capital.name}"></option>
+            </select>
+            <div class="form-control-feedback small" th:each="error : ${#fields.errors('capitals')}" th:text="${error}">Error in capitals</div>
+        </div>
+        <br/>
+        <input type="submit" class="btn btn-default" value="Submit">
+    </form>
+
+</body>
+</html>

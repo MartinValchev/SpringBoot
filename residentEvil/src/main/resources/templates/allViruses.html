@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:dt="http://www.thymeleaf.org/dandelion/datatables">
+<head>
+    <meta http-equiv="Content-Type" content="application/json; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    <title>All Virus List</title>
+</head>
+<body>
+<header th:insert="/fragments/menu::menu"></header>
+	<br />
+<div class="container" >
+    <div class="jumbotron" style="background-color: white">
+        <h2>All Virus List</h2>
+    </div>
+    <table class="table" >
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Magnitude</th>
+            <th>Released On</th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tbody>
+        <tr th:each="virus:${allVirusList}">
+            <td th:text="${virus.id}"></td>
+            <td th:text="${virus.name}"></td>
+            <td th:text="${virus.magnitude}"></td>
+            <td th:text="${#dates.format(virus.releasedOn,'dd-MMM-yyyy')}"></td>
+            <td><button class="btn btn-default"><a th:href="'/editVirus/' + ${virus.id}">Edit</a></button>
+             <td><button class="btn btn-default"><a th:href="'/deleteVirus/' + ${virus.id}">Delete</a></button>
+            </td>
+        </tr>
+        <tbody>
+    </table>
+</div>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/tether.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

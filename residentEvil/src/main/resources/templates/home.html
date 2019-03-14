@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv="Content-Type" content="application/json; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    <title>All Virus List</title>
+</head>
+<body>
+<header th:insert="/fragments/menu::menu"></header>
+<br/>
+<div class="jumbotron" style="background-color: #900c45;">
+	<h2 style="color:white;">Project: Resident Evil</h2>
+	<hr/>
+	<div style="color:white;">Resident Evil is a system that registers virus spreads across the world</div>
+</div>
+<script th:src="@{/jquery/jquery.min.js}"></script>
+<script th:src="@{/bootstrap/js/tether.min.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+</body>
+</html>

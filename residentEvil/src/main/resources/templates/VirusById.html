@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="application/json; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+    <title>Get Part by ID</title>
+</head>
+    <body>
+    	<header th:insert="/fragments/menu::menu"></header>
+			<br />
+        <div class="container">
+            <div class="jumbotron" style="background-color: white">
+                <h2>Virus Information by Id</h2>
+            </div>
+            <div class="panel panel-default">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <label for="virusId" class="col-sm-2 col-form-label"><b>Virus ID: </b> </label><span id ="virusId" th:text="${virus.id}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="virusName" class="col-sm-2 col-form-label"><b>Name: </b> </label><span id ="virusName" th:text="${virus.name}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="virusDesc" class="col-sm-2 col-form-label"><b>Description: </b> </label><span id ="virusDesc" th:text="${virus.description}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="sideEffects" class="col-sm-2 col-form-label"><b>Side Effects: </b> </label><span id ="sideEffects" th:text="${virus.sideEffects}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="creator" class="col-sm-2 col-form-label"><b>Creator: </b> </label><span id ="creator" th:text="${virus.creator}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="isDeadly" class="col-sm-2 col-form-label"><b>IsDeadly: </b> </label><span id ="isDeadly" th:text="${virus.isDeadly}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="isCurable" class="col-sm-2 col-form-label"><b>IsCurable: </b> </label><span id ="isCurable" th:text="${virus.isCurable}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="mutation" class="col-sm-2 col-form-label"><b>Mutation: </b> </label><span id ="mutation" th:text="${virus.mutation}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="turnoverRate" class="col-sm-2 col-form-label"><b>Turnover Rate: </b> </label><span id ="turnoverRate" th:text="${virus.turnoverRate}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="hoursUntilTurn" class="col-sm-2 col-form-label"><b>Hours Until Turn: </b> </label><span id ="hoursUntilTurn" th:text="${virus.hoursUntilTurn}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="magnitude" class="col-sm-2 col-form-label"><b>Magnitude: </b> </label><span id ="magnitude" th:text="${virus.magnitude}"></span>
+                    </li>
+                    <li class="list-group-item">
+                        <label for="releasedOn" class="col-sm-2 col-form-label"><b>Released Date: </b> </label><span id ="releasedOn" th:text="${#dates.format(virus.releasedOn,'dd-MMM-yyyy')}"></span>
+                    </li>
+                </ul>
+                <div>
+                    <span class="col-sm-2"><b>Capitals:</b></span>
+                    <ul class="list-group" th:each="capital : ${virus.capitals}">
+                        <li th:text="${capital.name}" class="list-group-item"></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <script th:src="@{/jquery/jquery.min.js}"></script>
+        <script th:src="@{/bootstrap/js/tether.min.js}"></script>
+        <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    </body>
+</html>
+
