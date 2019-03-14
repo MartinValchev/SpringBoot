@@ -25,8 +25,10 @@ public class Document {
 	@Column(name="uuid", updatable=false, nullable=false)
 	private String uuid;
 	
+	@Column(name="title")
 	private String title;
 	
+	@Column(name="content")
 	private String content;
 
 	public String getUuid() {

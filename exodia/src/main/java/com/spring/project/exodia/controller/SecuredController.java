@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.project.exodia.entity.Document;
@@ -50,11 +51,11 @@ public class SecuredController {
 		return modelAndView;
 	}
 
-	@RequestMapping("/details/{id}")
-	public ModelAndView getDetailsPage(ModelAndView modelAndView, @PathVariable("id") String id) {
+	@RequestMapping("/details/{uuid}")
+	public ModelAndView getDetailsPage(ModelAndView modelAndView, @PathVariable("uuid") String uuid) {
 
 		if (isUserLogged()) {
-			Document document = documentService.getDocumentById(id);
+			Document document = documentService.getDocumentById(uuid);
 			modelAndView.addObject("document", document);
 			modelAndView.setViewName("details");
 		} else {
@@ -73,27 +74,40 @@ public class SecuredController {
 		return modelAndView;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/print")
-	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute Document document) {
-		documentService.printDocument(document);
-		modelAndView.setViewName("redirect:/home");
-		return modelAndView;
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, path = "/print")
-	public ModelAndView getPrintPage(ModelAndView modelAndView) {
 
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/print")
+	public ModelAndView getPrintPage(ModelAndView modelAndView,@ModelAttribute(name="document") Document document) {
 		if (isUserLogged()) {
-			modelAndView.setViewName("redirect:/print");
+			modelAndView.addObject("document", document);
+			modelAndView.setViewName("print");
 		} else {
 			modelAndView.setViewName("redirect:/login");
 		}
 
 		return modelAndView;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/printDocument")
+	public ModelAndView printDocument(ModelAndView modelAndView,@ModelAttribute(name="document") Document document) {
+		documentService.printDocument(document);
+		modelAndView.setViewName("redirect:/home");
+		return modelAndView;
+	}
 	private boolean isUserLogged() {
 		return httpSessionFactory.getObject().getAttribute("username") != null;
 
+	}
+	@RequestMapping("/logout")
+	public ModelAndView logout(ModelAndView modelAndView) {
+		 HttpSession session =httpSessionFactory.getObject();
+		 if(session!=null){
+			 httpSessionFactory.getObject().removeAttribute("username");
+	            session.invalidate();
+	            session=null;
+	        }
+		 modelAndView.setViewName("redirect:/index"); 
+		return modelAndView;
 	}
 
 }
