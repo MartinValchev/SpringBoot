@@ -40,12 +40,14 @@ public class VirusServiceImpl implements VirusService {
     }
 
     @Override
-    public void removeVirus(Virus virus) {
+    public void removeVirus(VirusBindingModel virusBindingModel) {
+    	Virus virus = modelMapper.map(virusBindingModel,Virus.class);
         virusRepository.delete(virus);
     }
 
     @Override
-    public void editVirus(Virus virus) {
+    public void editVirus(VirusBindingModel virusBindingModel) {
+    	Virus virus = modelMapper.map(virusBindingModel,Virus.class);
         virusRepository.save(virus);
     }
 

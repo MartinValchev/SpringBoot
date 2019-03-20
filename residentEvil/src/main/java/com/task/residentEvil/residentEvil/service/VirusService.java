@@ -12,9 +12,9 @@ public interface VirusService {
 
     Virus addVirus(VirusBindingModel virusBindingModel);
 
-    void removeVirus(Virus virus);
+    void removeVirus(VirusBindingModel virusBindingModel);
 
-    void editVirus(Virus virus);
+    void editVirus(VirusBindingModel virusBindingModel);
 
     String getGeoData();
 }

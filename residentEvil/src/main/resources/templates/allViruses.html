@@ -5,16 +5,23 @@
     <meta http-equiv="Content-Type" content="application/json; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
+   <link rel="stylesheet" href="../static/bootstrap/css/tabulator.css" th:href="@{/bootstrap/css/tabulator.css}" />
     <title>All Virus List</title>
 </head>
 <body>
 <header th:insert="/fragments/menu::menu"></header>
 	<br />
-<div class="container" >
+<div class="container " >
     <div class="jumbotron" style="background-color: white">
         <h2>All Virus List</h2>
     </div>
-    <table class="table" >
+  <div><span>Your choice:  </span> <input type="radio" id="capitals" name="option" value="capitals">Capitals
+   <input type="radio" id="viruses" name="option" value="viruses">Viruses</div>
+</div>
+<br/>
+<div id="pageContent">
+	<div id="virusContent" style="display:none">
+	  <table class="table" id="viruses_table">
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -23,21 +30,106 @@
             <th></th>
             <th></th>
         </tr>
-        <tbody>
-        <tr th:each="virus:${allVirusList}">
-            <td th:text="${virus.id}"></td>
-            <td th:text="${virus.name}"></td>
-            <td th:text="${virus.magnitude}"></td>
-            <td th:text="${#dates.format(virus.releasedOn,'dd-MMM-yyyy')}"></td>
-            <td><button class="btn btn-default"><a th:href="'/editVirus/' + ${virus.id}">Edit</a></button>
-             <td><button class="btn btn-default"><a th:href="'/deleteVirus/' + ${virus.id}">Delete</a></button>
-            </td>
-        </tr>
+        <tbody id="v_tbody">
         <tbody>
     </table>
+	</div>
+	<div id="capitalsContent" style="display:none">
+	  <table class="table" id="capitals_table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+        </tr>
+        <tbody id="c_tbody">
+        <tbody>
+    </table>
+	</div>
 </div>
+<!-- template -->
 <script th:src="@{/jquery/jquery.min.js}"></script>
 <script th:src="@{/bootstrap/js/tether.min.js}"></script>
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<template id="virus_table_row">
+        <tr>
+            <td id="virus_id"></td>
+            <td id="virus_name"></td>
+            <td id="virus_magnitude"></td>
+            <td id="virus_released_on"></td>
+             <td><button class="btn btn-default"><a  href="/editVirus/">Edit</a></button>
+             <td><button class="btn btn-default"><a href="/deleteVirus/">Delete</a></button></td>
+        </tr>
+        <tbody>
+        
+</template>
+<template id="capitals_table_row">
+        <tr>
+            <td id="capital_id"></td>
+            <td id="capital_name"></td>
+            <td id="capital_latitude"></td>
+            <td id="capital_longitude"></td>
+        </tr>
+        <tbody>
+        
+</template>
+<script>
+$("#viruses").on('change', function(e){
+	<!--reset state if capitals option was selected previously-->
+	document.querySelector('#capitalsContent').style.display = "none";
+	$("#viruses_table tr td").remove();
+	let tbody = $("#tbody");
+	let tableContainer = $("#virusContent");
+	$.getJSON('/virusList').then(virusList =>{	  
+		var tbody = document.querySelector("#v_tbody");
+		let virusData = virusList;
+	  var template = document.querySelector('#virus_table_row');
+	  $.each(virusData, function(i,virus) {
+		  let inputData = virus;
+		let nodeElement =template.content;
+		var clone = document.importNode(nodeElement, true);
+		var td = clone.querySelectorAll("td");
+		var links = clone.querySelectorAll("a");
+		td[0].textContent  =  virus.id;
+		td[1].textContent  = virus.name;
+		td[2].textContent  = virus.magnitude;
+		td[3].textContent = virus.releasedOn;
+	   	links[0].href = '/editVirus/' + virus.id;
+		links[1].href = '/deleteVirus/' + virus.id;
+		  tbody.appendChild(clone);
+		})
+			document.querySelector('#virusContent').style.display = "block";
+		
+		});
+	
+});
+<!--captials-->	
+$("#capitals").on('change', function(e){ 
+	<!--hide virus block if present-->
+	document.querySelector('#virusContent').style.display = "none";
+	let tbody = $("#tbody");
+	let tableContainer = $("#capitalsContent");
+	$.getJSON('/capitalsList').then(capitalsList =>{	  
+		let capital_tbody = document.querySelector("#c_tbody");
+		let capitalsData = capitalsList;
+	  let capital_template = document.querySelector('#capitals_table_row');
+	  $.each(capitalsData, function(i,capital) {
+
+		var clone = document.importNode(capital_template.content, true);
+		var td = clone.querySelectorAll("td");
+		
+		td[0].textContent  =  capital.id;
+		td[1].textContent  =  capital.name;
+		td[2].textContent  =  capital.latitude;
+		td[3].textContent  =  capital.longitude;
+	
+		capital_tbody.appendChild(clone);
+		})
+		
+		});
+	document.querySelector('#capitalsContent').style.display = "block";
+});
+
+</script>
 </body>
 </html>

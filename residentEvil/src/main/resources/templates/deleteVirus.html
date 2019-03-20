@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.min.css" th:href="@{/bootstrap/css/bootstrap.min.css}" />
 
-    <title>Edit Virus</title>
+    <title>Delete Virus</title>
 </head>
 <body>
 <header th:insert="/fragments/menu::menu"></header>
 	<br />
 <div class="container">
     <div class="jumbotron" style="background-color: white">
-        <h2>Edit Virus</h2>
+        <h2>Delete Virus</h2>
     </div>
     <form  th:replace="fragments/forms::genericVirusForm"></form>
     </form>
@@ -22,13 +22,32 @@
 <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
 	<script>
 	$(document).ready(function(){
-		 const urlPath = '/editVirus';
+		 const urlPath = '/deleteVirus';
 		 const editMethod = 'post'
-		 let form = document.querySelector('#virusForm')
+		 let form = document.querySelector('#virusForm');
+		 let magnitudeElement = document.querySelector('#magnitude');	 
+		 let capitalsElement = document.querySelector('#capitals');	 
+		 let isDeadlyInputElement = document.querySelector('#isDeadlyInput');
+		 let isCurableInputElement = document.querySelector('#isCurableInput');
+		 let inputElements= $( ":input" );
+		 let inputRadioElements = $( ":input:radio" );
+		 let releasedDateElement = document.querySelector('input#releasedOnInput');
 		 form.action=urlPath;
 		 form.method =editMethod
-		 let releasedDateElement = document.querySelector('input#releasedOnInput');
+		 
+		 
+		 $.each( inputElements, function( index, inputElement ) {
+			 inputElement.readOnly = true;
+			});
+		 $.each( inputRadioElements, function( index, radioElement ) {
+			 radioElement.disabled = true;
+			});
+	
 		 releasedDateElement.readOnly = true;
+		 magnitudeElement.disabled = true;
+		 capitalsElement.disabled =true;
+		 isDeadlyInputElement.disabled =true;
+		 isCurableInputElement.disabled =true;
 	 });
 	</script>
 </body>

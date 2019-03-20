@@ -1,21 +1,33 @@
 package com.task.residentEvil.residentEvil.entity;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name="virus")
-public class Virus {
-    @Id
+public class Virus implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5625379045998030912L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String description;
+    
+    @Column(name ="side_effects")
     private String sideEffects;
     private String creator;
+    
+    @Column(name ="is_deadly")
     private boolean isDeadly;
+    
+    @Column(name ="is_curable")
     private boolean isCurable;
 
     @Enumerated(EnumType.STRING)

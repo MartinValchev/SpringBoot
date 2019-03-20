@@ -1,21 +1,29 @@
 package com.task.residentEvil.residentEvil.entity;
 
-import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 @Entity
 @Table(name="capitals")
-public class Capitals {
-    @Id
+public class Capitals implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -323560205746281569L;
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private double latitude;
     private double longitude;
-
-    @ManyToMany(mappedBy = "capitals")
-    private List<Virus> virus= new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -49,11 +57,4 @@ public class Capitals {
         this.longitude = longitude;
     }
 
-    public List<Virus> getVirus() {
-        return virus;
-    }
-
-    public void setVirus(List<Virus> virus) {
-        this.virus = virus;
-    }
 }

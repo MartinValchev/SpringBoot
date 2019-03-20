@@ -16,10 +16,18 @@
 		<div class="jumbotron" style="background-color: white">
 			<h2>Spread a new Virus!</h2>
 		</div>
-		<form th:replace="fragments/forms::addVirusForm"></form>
+		<form  th:replace="fragments/forms::genericVirusForm"></form>
 	</div>
 	<script th:src="@{/jquery/jquery.min.js}"></script>
 	<script th:src="@{/bootstrap/js/tether.min.js}"></script>
 	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script>
+	$(document).ready(function(){
+		 const urlPath = '/virus/add';
+		 let form = document.querySelector('#virusForm')
+		 form.action=urlPath;
+	 });
+	</script>
+	
 </body>
 </html>

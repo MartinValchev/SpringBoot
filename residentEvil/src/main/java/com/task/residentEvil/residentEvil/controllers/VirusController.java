@@ -27,8 +27,6 @@ public class VirusController {
     @Autowired
     private CapitalsService capitalsService;
 
-    @Autowired
-    private VirusRepository virusRepository;
 
     @Autowired
     private VirusService virusService;
@@ -44,6 +42,7 @@ public class VirusController {
     public String getHomePage(){
         return "home";
     }
+    
     @GetMapping("/virus/add")
     public String getAddVirus(VirusBindingModel virusBindingModel, Model model){
         List<Mutation> mutationList = Stream.of(Mutation.values()).collect(Collectors.toList());
@@ -66,6 +65,15 @@ public class VirusController {
         model.addAttribute("allVirusList",allVirusList);
         return "allViruses";
     }
+    
+    @GetMapping("/virusList")
+    @ResponseBody
+    public List<Virus> getAllVirusList(Model model){
+        List<Virus> virusList = virusService.getAllVirusList();
+    	
+        return virusList;
+    }
+    
 
     @PostMapping("/virus/add")
     public String addVirus(@Valid @ModelAttribute VirusBindingModel virusBindingModel, BindingResult bindingResult, Model model){
@@ -102,7 +110,7 @@ public class VirusController {
         }
     }
 
-    @PutMapping("/editVirus")
+    @PostMapping("/editVirus")
     public String editVirus(@Valid @ModelAttribute VirusBindingModel virusBindingModel, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             List<Mutation> mutationList = Stream.of(Mutation.values()).collect(Collectors.toList());
@@ -114,15 +122,35 @@ public class VirusController {
             model.addAttribute("virusBindingModel",virusBindingModel);
             return "EditVirus";
         }else{
-            Virus virus =modelMapper.map(virusBindingModel,Virus.class);
-            Virus savedVirus = virusRepository.save(virus);
+            Virus savedVirus = virusService.addVirus(virusBindingModel);
             return "redirect:virus/" +  savedVirus.getId();
         }
     }
     @GetMapping("/deleteVirus/{id}")
-    public String deleteVirus(@PathVariable("id")Long id){
-       Virus deletedVirus = virusService.getVirusById(id);
-       virusRepository.delete(deletedVirus);
+    public String deleteVirus(@PathVariable("id")Long id,VirusBindingModel virusBindingModel, Model model){
+    	Virus virus = virusService.getVirusById(id);
+
+        if(virus !=null){
+            List<Mutation> mutationList = Stream.of(Mutation.values()).collect(Collectors.toList());
+            List<Magnitude> magnitudeList = Stream.of(Magnitude.values()).collect(Collectors.toList());
+            List<Capitals> capitalsList = capitalsService.getCapitalsList();
+            model.addAttribute("id", id);
+            model.addAttribute("allMutations",mutationList);
+            model.addAttribute("magnitudeList",magnitudeList);
+            model.addAttribute("capitalsList",capitalsList);
+            virusBindingModel = modelMapper.map(virus, VirusBindingModel.class);
+            model.addAttribute("virusBindingModel", virusBindingModel);
+            return "deleteVirus";
+        }else{
+            return "";
+        }
+
+    }
+
+    @PostMapping("/deleteVirus")
+    public String deleteVirus(@Valid @ModelAttribute VirusBindingModel virusBindingModel, BindingResult bindingResult, Model model){
+    	
+       virusService.removeVirus(virusBindingModel);
        return "redirect:/viruses";
     }
 
